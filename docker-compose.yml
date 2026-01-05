@@ -3,7 +3,6 @@ services:
     build: .
     command: uvicorn tidy_linker.asgi:application --host 0.0.0.0 --port 8000
     volumes:
-      - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     env_file:
@@ -20,8 +19,7 @@ services:
   worker:
     build: .
     command: celery -A tidy_linker worker -l info
-    volumes:
-      - .:/app
+    volumes: []
     env_file:
       - .env
     environment:
