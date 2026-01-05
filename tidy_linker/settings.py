@@ -38,6 +38,9 @@ DEBUG = os.environ.get("DJANGO_DEBUG", os.environ.get("DEBUG", "False")).lower()
 # This prevents CSRF referer mismatches when the client uses https
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+# Honor X-Forwarded-Host from Nginx so Django sees the correct host
+USE_X_FORWARDED_HOST = True
+
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get("DJANGO_ALLOWED_HOSTS", os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost")).split(",") if h.strip()]
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
