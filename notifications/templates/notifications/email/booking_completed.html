@@ -1,0 +1,20 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h2>Job Completed</h2>
+<p>Hi {{ cleaner_name }},</p>
+
+<p>Great news! The employer has marked the job as completed:</p>
+
+<div class="booking-details">
+    <p><strong>Job:</strong> {{ job_title }}</p>
+    <p><strong>Job ID:</strong> #{{ job_id }}</p>
+    <p><strong>Booking ID:</strong> #{{ booking_id }}</p>
+</div>
+
+<p>Thank you for your excellent work! We hope to see you on more jobs soon.</p>
+
+<p>If you have any questions, feel free to reach out to us.</p>
+
+<a href="{{ site_url }}" class="button">View Dashboard</a>
+{% endblock %}

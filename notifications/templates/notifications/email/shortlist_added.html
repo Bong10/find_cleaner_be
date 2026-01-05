@@ -1,0 +1,31 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h1>⭐ You've Been Shortlisted!</h1>
+
+<p>Hi {{ name }},</p>
+
+<p>Good news! {{ employer_name }} has added you to their shortlist for a job.</p>
+
+<div style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #2196F3; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Job Details</h3>
+    <p><strong>Job:</strong> {{ job_title }}</p>
+    <p><strong>Employer:</strong> {{ employer_name }}</p>
+</div>
+
+<p><strong>What This Means:</strong></p>
+<ul>
+    <li>You're among the top candidates for this job</li>
+    <li>The employer is seriously considering you</li>
+    <li>You may receive a booking request soon</li>
+</ul>
+
+<a href="{{ job_url }}" class="button">View Job Details</a>
+
+<p>Make sure your profile is up-to-date and you're available for the job dates!</p>
+
+<p>
+Best regards,<br>
+The find-cleaner.com Team
+</p>
+{% endblock %}

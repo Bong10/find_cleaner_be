@@ -1,0 +1,34 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h1>📋 New Booking Request</h1>
+
+<p>Hi {{ name }},</p>
+
+<p>Great news! {{ employer_name }} has requested to book you for a cleaning job.</p>
+
+<div style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Job Details</h3>
+    <p><strong>Service:</strong> {{ service_name }}</p>
+    <p><strong>Date:</strong> {{ booking_date }}</p>
+    <p><strong>Time:</strong> {{ booking_time }}</p>
+    <p><strong>Location:</strong> {{ location }}</p>
+    <p><strong>Employer:</strong> {{ employer_name }}</p>
+</div>
+
+<p><strong>Next Steps:</strong></p>
+<ul>
+    <li>Review the booking details</li>
+    <li>Confirm your availability</li>
+    <li>Once confirmed, the employer will proceed with payment</li>
+</ul>
+
+<a href="{{ booking_url }}" class="button">View & Confirm Booking</a>
+
+<p>Please respond within 24 hours to secure this booking.</p>
+
+<p>
+Best regards,<br>
+The find-cleaner.com Team
+</p>
+{% endblock %}

@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+*.log
+
+# Environments
+venv/
+.env
+.env.*
+.venv/
+
+# Django
+staticfiles/
+media/
+tmp/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Migrations cache
+**/__pycache__/
+
+# Node (if present)
+node_modules/
+
+# Coverage/Testing
+.coverage
+htmlcov/
+pytestcache/
+
+# Docker/compose overrides
+*.local.yml
+
+# Firebase credentials (sensitive)
+find-cleaner-*-firebase-adminsdk-*.json

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Verified - Find Cleaner</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f0f9f7 0%, #e8f5f3 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .email-wrapper {
+      width: 100%;
+      background: linear-gradient(135deg, #f0f9f7 0%, #e8f5f3 100%);
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(43, 163, 137, 0.15);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #28a745 0%, #34d058 100%);
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      display: block;
+      margin: 0 auto 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 50%;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      font-size: 36px;
+    }
+    
+    h1 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .content {
+      padding: 40px 30px;
+    }
+    
+    .greeting {
+      font-size: 20px;
+      color: #333333;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    
+    .message {
+      font-size: 16px;
+      color: #555555;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+    
+    .status-badge {
+      background: linear-gradient(135deg, #28a745 0%, #34d058 100%);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 30px 0;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .next-steps {
+      background: #f8f9fa;
+      padding: 25px;
+      border-radius: 12px;
+      border-left: 4px solid #28a745;
+      margin: 30px 0;
+    }
+    
+    .next-steps h3 {
+      color: #28a745;
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    
+    .next-steps ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .next-steps li {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+      color: #555555;
+    }
+    
+    .next-steps li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #28a745;
+      font-weight: bold;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(135deg, #2aa389 0%, #3bc4a8 100%);
+      color: #ffffff;
+      padding: 16px 40px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      margin: 20px 0;
+      box-shadow: 0 4px 15px rgba(42, 163, 137, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(42, 163, 137, 0.4);
+    }
+    
+    .footer {
+      background: #f8f9fa;
+      padding: 30px;
+      text-align: center;
+      color: #6c757d;
+      font-size: 14px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .footer a {
+      color: #2aa389;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="container">
+      <div class="header">
+        <div class="logo">
+          <img src="cid:logo" alt="Find Cleaner Logo" />
+        </div>
+        <div class="success-icon">✓</div>
+        <h1>Account Verified!</h1>
+      </div>
+      
+      <div class="content">
+        <p class="greeting">Hello {{ name }},</p>
+        
+        <p class="message">
+          Great news! Your Find Cleaner cleaner account has been successfully verified by our admin team. 
+          You are now visible to employers and can start receiving job offers.
+        </p>
+        
+        <div class="status-badge">
+          ✓ Your account is now ACTIVE and VERIFIED
+        </div>
+        
+        <div class="next-steps">
+          <h3>What's Next?</h3>
+          <ul>
+            <li>Your profile is now visible to employers in your area</li>
+            <li>You can start browsing and applying for cleaning jobs</li>
+            <li>Employers can now send you direct job offers</li>
+            <li>Make sure your profile is complete to attract more opportunities</li>
+          </ul>
+        </div>
+        
+        <p class="message">
+          Log in to your account to start exploring available jobs and complete your profile if you haven't already.
+        </p>
+        
+        <center>
+          <a href="{{ login_url }}" class="cta-button">Go to Dashboard</a>
+        </center>
+        
+        <p class="message" style="margin-top: 30px; font-size: 14px; color: #6c757d;">
+          If you have any questions or need assistance, feel free to contact our support team.
+        </p>
+      </div>
+      
+      <div class="footer">
+        <p>© 2025 Find Cleaner. All rights reserved.</p>
+        <p style="margin-top: 10px;">
+          <a href="{{ frontend_url }}">Visit Website</a> | 
+          <a href="mailto:{{ support_email }}">Contact Support</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

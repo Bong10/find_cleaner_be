@@ -1,0 +1,22 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h1>💬 You Have a New Message</h1>
+
+<p>Hi {{ name }},</p>
+
+<p>{{ sender_name }} sent you a message:</p>
+
+<div style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #2196F3; margin: 20px 0;">
+    <p><em>"{{ message_preview }}"</em></p>
+</div>
+
+<a href="{{ chat_url }}" class="button">View Message</a>
+
+<p>Reply quickly to keep the conversation going!</p>
+
+<p>
+Best regards,<br>
+The find-cleaner.com Team
+</p>
+{% endblock %}

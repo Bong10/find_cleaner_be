@@ -1,0 +1,68 @@
+services:
+  web:
+    build: .
+    command: uvicorn tidy_linker.asgi:application --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - redis
+      - db
+
+  worker:
+    build: .
+    command: celery -A tidy_linker worker -l info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_HOST=db
+      - DB_PORT=5432
+      - RUN_MIGRATIONS=false
+    depends_on:
+      - redis
+      - db
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      # Map the Django-style names to Postgres-style names
+      - POSTGRES_DB=dzqmeveu_find_cleaner_db
+      - POSTGRES_USER=dzqmeveu_admin
+      - POSTGRES_PASSWORD=zGi!HL^5Ff
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

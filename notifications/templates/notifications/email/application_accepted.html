@@ -1,0 +1,31 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h1>🎉 Application Accepted!</h1>
+
+<p>Hi {{ name }},</p>
+
+<p>Congratulations! Your application has been accepted.</p>
+
+<div style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Job Details</h3>
+    <p><strong>Job:</strong> {{ job_title }}</p>
+    <p><strong>Employer:</strong> {{ employer_name }}</p>
+</div>
+
+<p><strong>What's Next?</strong></p>
+<ul>
+    <li>The employer may book you for this job</li>
+    <li>You'll receive a booking notification when they proceed</li>
+    <li>Keep your schedule available for the agreed dates</li>
+</ul>
+
+<a href="{{ job_url }}" class="button">View Job Details</a>
+
+<p>Good luck with your new opportunity!</p>
+
+<p>
+Best regards,<br>
+The find-cleaner.com Team
+</p>
+{% endblock %}

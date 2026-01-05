@@ -1,0 +1,36 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h1>✅ Your Booking is Confirmed!</h1>
+
+<p>Hi {{ name }},</p>
+
+<p>Great news! Your booking has been confirmed.</p>
+
+<div style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Booking Details</h3>
+    <p><strong>Service:</strong> {{ service_name }}</p>
+    <p><strong>Date:</strong> {{ booking_date }}</p>
+    <p><strong>Time:</strong> {{ booking_time }}</p>
+    <p><strong>Cleaner:</strong> {{ cleaner_name }}</p>
+    <p><strong>Location:</strong> {{ location }}</p>
+</div>
+
+<p><strong>What's Next?</strong></p>
+<ul>
+    <li>Your cleaner will arrive on time</li>
+    <li>You'll receive a reminder 24 hours before</li>
+    <li>You can chat with your cleaner in the app</li>
+</ul>
+
+<a href="{{ booking_url }}" class="button">View Booking Details</a>
+
+<p>If you need to make any changes, please contact us at least 24 hours in advance.</p>
+
+<p>Thank you for choosing find-cleaner.com!</p>
+
+<p>
+Best regards,<br>
+The find-cleaner.com Team
+</p>
+{% endblock %}

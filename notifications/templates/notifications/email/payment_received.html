@@ -1,0 +1,35 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h1>💷 Payment Received!</h1>
+
+<p>Hi {{ name }},</p>
+
+<p>Excellent news! Payment has been confirmed for your upcoming booking.</p>
+
+<div style="background-color: #f9f9f9; padding: 20px; border-left: 4px solid #4CAF50; margin: 20px 0;">
+    <h3 style="margin-top: 0;">Payment Details</h3>
+    <p><strong>Service:</strong> {{ service_name }}</p>
+    <p><strong>Amount:</strong> {{ amount }}</p>
+    <p><strong>Date:</strong> {{ booking_date }}</p>
+    <p><strong>Time:</strong> {{ booking_time }}</p>
+</div>
+
+<p><strong>Your booking is now fully confirmed!</strong></p>
+
+<p>What happens next:</p>
+<ul>
+    <li>Arrive on time at the specified location</li>
+    <li>Complete the service professionally</li>
+    <li>The payment will be released to you after completion</li>
+</ul>
+
+<a href="{{ booking_url }}" class="button">View Booking Details</a>
+
+<p>If you have any questions or need to make changes, please contact the client through the app.</p>
+
+<p>
+Best regards,<br>
+The find-cleaner.com Team
+</p>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "notifications/email/base_email.html" %}
+
+{% block content %}
+<h2>You Received a New Review</h2>
+<p>Hi {{ recipient_name }},</p>
+
+<p>{{ reviewer_name }} left a review for you on a recent job:</p>
+
+<div class="booking-details">
+    <p><strong>Job:</strong> {{ job_title }}</p>
+    <p><strong>Job ID:</strong> #{{ job_id }}</p>
+    <p><strong>Booking ID:</strong> #{{ booking_id }}</p>
+    <p><strong>Rating:</strong> {{ rating }}/5 ⭐</p>
+    <p><strong>Comment:</strong> {{ comment }}</p>
+</div>
+
+<p>Reviews help build your reputation on find-cleaner.com. Keep up the great work!</p>
+
+<a href="{{ site_url }}" class="button">View Your Profile</a>
+{% endblock %}
