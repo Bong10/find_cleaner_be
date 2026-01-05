@@ -24,6 +24,6 @@ COPY . /app/
 
 # Make entrypoint executable
 COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
