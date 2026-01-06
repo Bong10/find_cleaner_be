@@ -227,8 +227,8 @@ DJOSER = {
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'confirmation-account/{uid}/{token}',  # Correction ici
     'SEND_ACTIVATION_EMAIL': True,
-    'PROTOCOL': 'http',  # Frontend protocol
-    'DOMAIN': '127.0.0.1:3000',  # Frontend domain
+    'PROTOCOL': os.getenv('DJOSER_PROTOCOL', 'http'),  # Frontend protocol
+    'DOMAIN': os.getenv('DJOSER_DOMAIN', '127.0.0.1:3000'),  # Frontend domain
     'SITE_NAME': 'Find Cleaner',
     'DISABLED_ENDPOINTS': ['user.create'],
     'EMAIL': {
@@ -249,9 +249,9 @@ DJOSER = {
 # pprint.pprint(DJOSER)
 
 # Frontend Activation Settings
-ACTIVATE_VIA_FRONTEND = True
-FRONTEND_ORIGIN = "http://localhost:3000"  # Your Next.js URL
-FRONTEND_ACTIVATE_PATH = "/confirmation-account"  # Your Next.js route
+ACTIVATE_VIA_FRONTEND = os.getenv("ACTIVATE_VIA_FRONTEND", "true").lower() == "true"
+FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")  # Your Next.js URL
+FRONTEND_ACTIVATE_PATH = os.getenv("FRONTEND_ACTIVATE_PATH", "/confirmation-account")  # Your Next.js route
 
 # Password Reset Token Settings
 PASSWORD_RESET_TIMEOUT = 3600  # 1 hour (in seconds) - tokens expire after this time
