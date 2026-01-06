@@ -34,12 +34,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", os.environ.get("SECRET_KEY", "d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", os.environ.get("DEBUG", "False")).lower() == "true"
 
-# Ensure Django recognizes HTTPS when behind a reverse proxy (Nginx)
-# This prevents CSRF referer mismatches when the client uses https
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-# Honor X-Forwarded-Host from Nginx so Django sees the correct host
-USE_X_FORWARDED_HOST = True
+# (reverted) Do not force HTTPS/proxy headers in this build
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get("DJANGO_ALLOWED_HOSTS", os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost")).split(",") if h.strip()]
 
@@ -82,6 +77,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # ✅ must be FIRST (above CommonMiddleware)
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Serve static files with ASGI/daphne
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -312,6 +308,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'support@digitalwebsolutions.co.uk'
 EMAIL_HOST_PASSWORD = 'AC%0VA]vq]'  # No spaces
 DEFAULT_FROM_EMAIL = 'support@digitalwebsolutions.co.uk'
+SERVER_EMAIL = 'support@digitalwebsolutions.co.uk'
 EMAIL_TIMEOUT = 30  # 30 second timeout (increased from 10 for unstable connections)
 
 # CORS/CSRF for dev
@@ -341,7 +338,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max per task
 EMAIL_PROVIDER = os.getenv('EMAIL_PROVIDER', 'brevo')  # Options: 'brevo', 'sendgrid', 'smtp', 'mock'
 BREVO_API_KEY = os.getenv('BREVO_API_KEY', '')  # Get from https://app.brevo.com/settings/keys/api
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY', '')  # Alternative to Brevo
-DEFAULT_FROM_EMAIL = 'noreply@find-cleaner.com'
+# DEFAULT_FROM_EMAIL is set above in SMTP section
 
 # SMS Provider Configuration (Twilio)
 SMS_PROVIDER = os.getenv('SMS_PROVIDER', 'mock')  # Options: 'twilio', 'mock'
