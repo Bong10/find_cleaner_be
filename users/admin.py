@@ -199,7 +199,11 @@ class CleanerAdmin(admin.ModelAdmin):
         
         for cleaner in queryset.filter(is_verified_by_admin=False):
             cleaner.is_verified_by_admin = True
-            cleaner.verified_by = request.user.admin
+            # Safely get admin profile (avoid crash if user has no Admin)
+            try:
+                cleaner.verified_by = request.user.admin
+            except Exception:
+                cleaner.verified_by = Admin.objects.filter(user=request.user).first()
             cleaner.verified_at = timezone.now()
             cleaner.save()
             approved_count += 1
@@ -320,7 +324,11 @@ class CleanerAdmin(admin.ModelAdmin):
                 # Auto-verify the account
                 obj.is_verified_by_admin = True
                 if not obj.verified_by:
-                    obj.verified_by = request.user.admin
+                    # Safely get admin profile (avoid crash if user has no Admin)
+                    try:
+                        obj.verified_by = request.user.admin
+                    except Exception:
+                        obj.verified_by = Admin.objects.filter(user=request.user).first()
                 from django.utils import timezone
                 obj.verified_at = timezone.now()
                 send_email = True
