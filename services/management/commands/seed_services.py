@@ -1,256 +1,94 @@
 from django.core.management.base import BaseCommand
-from services.models import Service, Category
+from services.models import Category, Service
 
 
 class Command(BaseCommand):
-    help = 'Seeds the database with standard cleaning services and categories'
+    help = 'Seed the database with cleaning service categories and services'
 
     def handle(self, *args, **options):
-        self.stdout.write('Seeding cleaning services...')
+        self.stdout.write('Seeding categories and services...')
 
         # Define categories
         categories_data = [
             {'name': 'Residential Cleaning', 'description': 'Home and apartment cleaning services'},
             {'name': 'Commercial Cleaning', 'description': 'Office and business cleaning services'},
-            {'name': 'Specialized Cleaning', 'description': 'Specialized and deep cleaning services'},
-            {'name': 'Move-Related Cleaning', 'description': 'Moving in/out cleaning services'},
-            {'name': 'Outdoor Cleaning', 'description': 'Exterior and outdoor cleaning services'},
+            {'name': 'Specialized Cleaning', 'description': 'Deep cleaning and specialty services'},
+            {'name': 'Move In/Out Cleaning', 'description': 'End of tenancy and move-related cleaning'},
+            {'name': 'Outdoor Cleaning', 'description': 'External and outdoor area cleaning'},
         ]
 
+        # Create categories
         categories = {}
         for cat_data in categories_data:
-            cat, created = Category.objects.get_or_create(
+            category, created = Category.objects.get_or_create(
                 name=cat_data['name'],
-                defaults={'description': cat_data['description'], 'active': True}
+                defaults={'description': cat_data['description']}
             )
-            categories[cat_data['name']] = cat
-            status = 'Created' if created else 'Found'
-            self.stdout.write(f"  {status} category: {cat.name}")
+            categories[cat_data['name']] = category
+            status = 'Created' if created else 'Already exists'
+            self.stdout.write(f"  {status}: Category '{category.name}'")
 
         # Define services with their categories
         services_data = [
             # Residential Cleaning
-            {
-                'name': 'Regular Cleaning',
-                'description': 'Standard house cleaning including dusting, vacuuming, mopping, and general tidying of all rooms.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Deep Cleaning',
-                'description': 'Thorough cleaning including behind appliances, inside cabinets, detailed scrubbing, and hard-to-reach areas.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 3,
-            },
-            {
-                'name': 'Kitchen Cleaning',
-                'description': 'Focused kitchen cleaning including appliances, countertops, cabinets, sink, and floor.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 1,
-            },
-            {
-                'name': 'Bathroom Cleaning',
-                'description': 'Detailed bathroom cleaning including toilet, shower/bath, sink, mirrors, and tiles.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 1,
-            },
-            {
-                'name': 'Bedroom Cleaning',
-                'description': 'Bedroom cleaning including bed making, dusting, vacuuming, and organizing.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 1,
-            },
-            {
-                'name': 'Living Room Cleaning',
-                'description': 'Living area cleaning including dusting furniture, vacuuming, and tidying.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 1,
-            },
+            {'name': 'Regular House Cleaning', 'category': 'Residential Cleaning', 'description': 'Standard weekly or bi-weekly home cleaning', 'min_hourly_rate': 15.00, 'min_hours_required': 2},
+            {'name': 'Deep House Cleaning', 'category': 'Residential Cleaning', 'description': 'Thorough deep cleaning of entire home', 'min_hourly_rate': 20.00, 'min_hours_required': 4},
+            {'name': 'Apartment Cleaning', 'category': 'Residential Cleaning', 'description': 'Cleaning services for flats and apartments', 'min_hourly_rate': 15.00, 'min_hours_required': 2},
+            {'name': 'Kitchen Deep Clean', 'category': 'Residential Cleaning', 'description': 'Intensive kitchen cleaning including appliances', 'min_hourly_rate': 18.00, 'min_hours_required': 2},
+            {'name': 'Bathroom Deep Clean', 'category': 'Residential Cleaning', 'description': 'Thorough bathroom sanitization and cleaning', 'min_hourly_rate': 18.00, 'min_hours_required': 1},
+            {'name': 'Bedroom Cleaning', 'category': 'Residential Cleaning', 'description': 'Bedroom tidying, dusting, and vacuuming', 'min_hourly_rate': 15.00, 'min_hours_required': 1},
+
+            # Commercial Cleaning
+            {'name': 'Office Cleaning', 'category': 'Commercial Cleaning', 'description': 'Regular office space cleaning and maintenance', 'min_hourly_rate': 18.00, 'min_hours_required': 2},
+            {'name': 'Retail Store Cleaning', 'category': 'Commercial Cleaning', 'description': 'Shop and retail space cleaning', 'min_hourly_rate': 18.00, 'min_hours_required': 2},
+            {'name': 'Restaurant Cleaning', 'category': 'Commercial Cleaning', 'description': 'Food service establishment deep cleaning', 'min_hourly_rate': 22.00, 'min_hours_required': 3},
+            {'name': 'Warehouse Cleaning', 'category': 'Commercial Cleaning', 'description': 'Industrial and warehouse space cleaning', 'min_hourly_rate': 20.00, 'min_hours_required': 4},
+            {'name': 'Medical Facility Cleaning', 'category': 'Commercial Cleaning', 'description': 'Healthcare facility sanitization', 'min_hourly_rate': 25.00, 'min_hours_required': 3},
+
             # Specialized Cleaning
-            {
-                'name': 'Oven Cleaning',
-                'description': 'Professional oven and cooktop deep cleaning, removing grease and burnt-on residue.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 1,
-            },
-            {
-                'name': 'Carpet Cleaning',
-                'description': 'Professional carpet cleaning including stain removal and deep extraction.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Upholstery Cleaning',
-                'description': 'Cleaning of sofas, chairs, and other upholstered furniture.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Window Cleaning',
-                'description': 'Interior and exterior window cleaning including frames and sills.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 14.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Fridge Cleaning',
-                'description': 'Deep cleaning of refrigerator interior, shelves, and drawers.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 1,
-            },
-            {
-                'name': 'Laundry & Ironing',
-                'description': 'Washing, drying, folding, and ironing clothes and linens.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 2,
-            },
-            # Move-Related
-            {
-                'name': 'End of Tenancy Cleaning',
-                'description': 'Comprehensive cleaning for rental properties at the end of a tenancy, meeting landlord standards.',
-                'category': 'Move-Related Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 4,
-            },
-            {
-                'name': 'Move-In Cleaning',
-                'description': 'Thorough cleaning of a property before moving in, ensuring a fresh start.',
-                'category': 'Move-Related Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 3,
-            },
-            {
-                'name': 'Move-Out Cleaning',
-                'description': 'Complete cleaning after moving out furniture, including all rooms and fixtures.',
-                'category': 'Move-Related Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 3,
-            },
-            # Commercial
-            {
-                'name': 'Office Cleaning',
-                'description': 'Professional office cleaning including desks, common areas, kitchens, and restrooms.',
-                'category': 'Commercial Cleaning',
-                'min_hourly_rate': 14.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Commercial Kitchen Cleaning',
-                'description': 'Industrial kitchen deep cleaning meeting health and safety standards.',
-                'category': 'Commercial Cleaning',
-                'min_hourly_rate': 18.00,
-                'min_hours_required': 3,
-            },
-            {
-                'name': 'Retail Store Cleaning',
-                'description': 'Cleaning of retail spaces including floors, displays, and fitting rooms.',
-                'category': 'Commercial Cleaning',
-                'min_hourly_rate': 14.00,
-                'min_hours_required': 2,
-            },
-            # Outdoor
-            {
-                'name': 'Patio & Decking Cleaning',
-                'description': 'Pressure washing and cleaning of patios, decks, and outdoor furniture.',
-                'category': 'Outdoor Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Garage Cleaning',
-                'description': 'Garage cleaning and organizing, including floor cleaning and decluttering.',
-                'category': 'Outdoor Cleaning',
-                'min_hourly_rate': 14.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Driveway Cleaning',
-                'description': 'Pressure washing and cleaning of driveways and paths.',
-                'category': 'Outdoor Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 2,
-            },
-            # Additional Specialized
-            {
-                'name': 'After Party Cleaning',
-                'description': 'Post-event cleanup including rubbish removal, surface cleaning, and restoring order.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 3,
-            },
-            {
-                'name': 'After Builders Cleaning',
-                'description': 'Post-construction cleaning including dust removal, debris clearing, and surface polishing.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 18.00,
-                'min_hours_required': 4,
-            },
-            {
-                'name': 'Spring Cleaning',
-                'description': 'Seasonal deep clean covering all areas of the home with extra attention to detail.',
-                'category': 'Specialized Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 4,
-            },
-            {
-                'name': 'One-Off Cleaning',
-                'description': 'Single visit cleaning service for any purpose, customized to your needs.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 13.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Airbnb/Holiday Let Cleaning',
-                'description': 'Turnover cleaning between guests for short-term rental properties.',
-                'category': 'Commercial Cleaning',
-                'min_hourly_rate': 15.00,
-                'min_hours_required': 2,
-            },
-            {
-                'name': 'Student Accommodation Cleaning',
-                'description': 'Cleaning services tailored for student housing and shared accommodations.',
-                'category': 'Residential Cleaning',
-                'min_hourly_rate': 12.00,
-                'min_hours_required': 2,
-            },
+            {'name': 'Carpet Cleaning', 'category': 'Specialized Cleaning', 'description': 'Professional carpet shampooing and stain removal', 'min_hourly_rate': 25.00, 'min_hours_required': 2},
+            {'name': 'Upholstery Cleaning', 'category': 'Specialized Cleaning', 'description': 'Sofa, chair, and furniture fabric cleaning', 'min_hourly_rate': 25.00, 'min_hours_required': 2},
+            {'name': 'Window Cleaning', 'category': 'Specialized Cleaning', 'description': 'Interior and exterior window washing', 'min_hourly_rate': 20.00, 'min_hours_required': 2},
+            {'name': 'Oven Cleaning', 'category': 'Specialized Cleaning', 'description': 'Deep oven and range cleaning', 'min_hourly_rate': 50.00, 'min_hours_required': 1},
+            {'name': 'Fridge Cleaning', 'category': 'Specialized Cleaning', 'description': 'Refrigerator deep clean and sanitization', 'min_hourly_rate': 30.00, 'min_hours_required': 1},
+            {'name': 'Mattress Cleaning', 'category': 'Specialized Cleaning', 'description': 'Mattress deep cleaning and sanitization', 'min_hourly_rate': 40.00, 'min_hours_required': 1},
+            {'name': 'After Builders Cleaning', 'category': 'Specialized Cleaning', 'description': 'Post-construction cleanup and dust removal', 'min_hourly_rate': 22.00, 'min_hours_required': 4},
+            {'name': 'Hoarding Cleanup', 'category': 'Specialized Cleaning', 'description': 'Sensitive hoarding situation cleaning', 'min_hourly_rate': 25.00, 'min_hours_required': 6},
+
+            # Move In/Out Cleaning
+            {'name': 'End of Tenancy Cleaning', 'category': 'Move In/Out Cleaning', 'description': 'Complete property clean for moving out', 'min_hourly_rate': 20.00, 'min_hours_required': 4},
+            {'name': 'Move-In Cleaning', 'category': 'Move In/Out Cleaning', 'description': 'Pre-move deep clean of new property', 'min_hourly_rate': 20.00, 'min_hours_required': 3},
+            {'name': 'Pre-Sale Property Cleaning', 'category': 'Move In/Out Cleaning', 'description': 'Property cleaning for viewings and sales', 'min_hourly_rate': 20.00, 'min_hours_required': 3},
+
+            # Outdoor Cleaning
+            {'name': 'Patio Cleaning', 'category': 'Outdoor Cleaning', 'description': 'Patio and decking pressure washing', 'min_hourly_rate': 22.00, 'min_hours_required': 2},
+            {'name': 'Driveway Cleaning', 'category': 'Outdoor Cleaning', 'description': 'Driveway pressure washing and cleaning', 'min_hourly_rate': 22.00, 'min_hours_required': 2},
+            {'name': 'Gutter Cleaning', 'category': 'Outdoor Cleaning', 'description': 'Gutter clearing and external pipe cleaning', 'min_hourly_rate': 25.00, 'min_hours_required': 2},
+            {'name': 'Garden Furniture Cleaning', 'category': 'Outdoor Cleaning', 'description': 'Outdoor furniture cleaning and restoration', 'min_hourly_rate': 20.00, 'min_hours_required': 1},
         ]
 
+        # Create services
         created_count = 0
-        updated_count = 0
-
+        existing_count = 0
         for svc_data in services_data:
-            category = categories.get(svc_data.pop('category'))
-            service, created = Service.objects.update_or_create(
+            category = categories.get(svc_data['category'])
+            service, created = Service.objects.get_or_create(
                 name=svc_data['name'],
                 defaults={
                     'description': svc_data['description'],
                     'category': category,
                     'min_hourly_rate': svc_data['min_hourly_rate'],
                     'min_hours_required': svc_data['min_hours_required'],
-                    'active': True,
                 }
             )
             if created:
                 created_count += 1
-                self.stdout.write(self.style.SUCCESS(f"  Created: {service.name}"))
             else:
-                updated_count += 1
-                self.stdout.write(f"  Updated: {service.name}")
+                existing_count += 1
 
         self.stdout.write(self.style.SUCCESS(
-            f"\nDone! Created {created_count} new services, updated {updated_count} existing."
+            f'\nDone! Created {created_count} new services, {existing_count} already existed.'
         ))
         self.stdout.write(self.style.SUCCESS(
-            f"Total services: {Service.objects.filter(active=True).count()}"
+            f'Total: {len(categories_data)} categories, {len(services_data)} services'
         ))

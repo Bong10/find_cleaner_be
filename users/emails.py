@@ -1,40 +1,7 @@
-import re
 from djoser.email import BaseEmailMessage
 from djoser.conf import settings as djoser_settings
 from djoser.utils import encode_uid
 from django.contrib.auth.tokens import default_token_generator
-
-
-def get_display_name(user):
-    """
-    Get a friendly display name for a user.
-    Priority: user.name > parsed email > generic fallback
-    """
-    # First try user.name
-    if hasattr(user, 'name') and user.name and user.name.strip():
-        return user.name.strip()
-    
-    # Fallback to parsing email
-    if user.email:
-        email_username = user.email.split('@')[0]
-        
-        # If has separators (dots, underscores), split and capitalize
-        if '.' in email_username or '_' in email_username:
-            name = email_username.replace('.', ' ').replace('_', ' ').title()
-            # Remove any trailing numbers
-            name = re.sub(r'\d+$', '', name).strip()
-            if name:
-                return name
-        
-        # If no separators, check if it looks name-like
-        # If it has numbers mixed in or is too long, use generic greeting
-        if re.search(r'\d', email_username) or len(email_username) > 15:
-            return "there"  # Results in "Hello there,"
-        
-        # Simple username without numbers - capitalize it
-        return email_username.title()
-    
-    return "there"
 
 
 class PasswordResetEmail(BaseEmailMessage):
@@ -51,8 +18,8 @@ class PasswordResetEmail(BaseEmailMessage):
             context["uid"] = encode_uid(user.pk)
             context["token"] = default_token_generator.make_token(user)
             
-            # Add friendly display name using smart parser
-            context["display_name"] = get_display_name(user)
+            # Use user's name field directly
+            context["display_name"] = user.name if user.name else "there"
 
         # FORCE frontend domain and protocol from Djoser settings (override parent's values)
         proto = getattr(djoser_settings, "PROTOCOL", "http")
