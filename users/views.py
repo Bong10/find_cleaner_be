@@ -48,18 +48,46 @@ def _build_activation_url(request, user):
         return request.build_absolute_uri(path)
 
 
+def _get_display_name(user):
+    """
+    Get a friendly display name for a user.
+    Priority: user.name > parsed email > generic fallback
+    """
+    import re
+    
+    # First try user.name
+    if hasattr(user, 'name') and user.name and user.name.strip():
+        return user.name.strip()
+    
+    # Fallback to parsing email
+    if user.email:
+        email_username = user.email.split('@')[0]
+        
+        # If has separators (dots, underscores), split and capitalize
+        if '.' in email_username or '_' in email_username:
+            name = email_username.replace('.', ' ').replace('_', ' ').title()
+            # Remove any trailing numbers
+            name = re.sub(r'\d+$', '', name).strip()
+            if name:
+                return name
+        
+        # If no separators, check if it looks name-like
+        # If it has numbers mixed in or is too long, use generic greeting
+        if re.search(r'\d', email_username) or len(email_username) > 15:
+            return "there"  # Results in "Hello there,"
+        
+        # Simple username without numbers - capitalize it
+        return email_username.title()
+    
+    return "there"
+
+
 def _send_activation_email(user, token_url):
     """
     Send HTML email with inline logo; uses {{ display_name }} & {{ token_url }}.
     Smart name display: prioritizes user.name, falls back to formatted email username.
     """
-    # Build friendly display name
-    if hasattr(user, 'name') and user.name:
-        display_name = user.name
-    else:
-        # Extract first part of email and capitalize it
-        email_username = user.email.split('@')[0] if user.email else "User"
-        display_name = email_username.replace('.', ' ').replace('_', ' ').title()
+    display_name = _get_display_name(user)
     
     template_path = os.path.join(settings.BASE_DIR, 'users', 'templates', 'jwt_email_template.html')
     html_content = render_to_string(template_path, {

@@ -16,6 +16,40 @@ admin.site.register(Admin)
 #admin.site.register(User)
 
 
+def get_display_name(user):
+    """
+    Get a friendly display name for a user.
+    Priority: user.name > parsed email > generic fallback
+    """
+    # First try user.name
+    if hasattr(user, 'name') and user.name and user.name.strip():
+        return user.name.strip()
+    
+    # Fallback to parsing email
+    if user.email:
+        email_username = user.email.split('@')[0]
+        
+        # If has separators (dots, underscores), split and capitalize
+        if '.' in email_username or '_' in email_username:
+            name = email_username.replace('.', ' ').replace('_', ' ').title()
+            # Remove any trailing numbers
+            import re
+            name = re.sub(r'\d+$', '', name).strip()
+            if name:
+                return name
+        
+        # If no separators, check if it looks name-like
+        # If it has numbers mixed in or is too long, use generic greeting
+        import re
+        if re.search(r'\d', email_username) or len(email_username) > 15:
+            return "there"  # Results in "Hello there,"
+        
+        # Simple username without numbers - capitalize it
+        return email_username.title()
+    
+    return "there"
+
+
 def send_verification_email(cleaner, approved=True, reason=None):
     """
     Send verification status email to cleaner.
@@ -26,13 +60,7 @@ def send_verification_email(cleaner, approved=True, reason=None):
         reason: Rejection/hold reason (optional)
     """
     user = cleaner.user
-    
-    # Build friendly display name
-    if hasattr(user, 'name') and user.name:
-        display_name = user.name
-    else:
-        email_username = user.email.split('@')[0] if user.email else "User"
-        display_name = email_username.replace('.', ' ').replace('_', ' ').title()
+    display_name = get_display_name(user)
     
     # Select template and subject based on approval status
     if approved:
